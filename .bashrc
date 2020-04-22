@@ -1,0 +1,2 @@
+export OVERLAY_VM_FILES=1
+export ENABLE_ACTIONS=1
