@@ -7,6 +7,10 @@ export WORK_DIR='/Users/gdryke/work'
 alias rr='cd $CODE_DIR'
 alias myip='curl ipecho.net/plain ; echo'
 
+alias dev-ssh='minikube -p actions-dev ssh'
+alias dev-start='vmrun start /Users/gdryke/.minikube/machines/actions-dev/actions-dev.vmx'
+alias dev-stop='vmrun stop /Users/gdryke/.minikube/machines/actions-dev/actions-dev.vmx'
+
 ## GHES Aliases, specifically HA
 alias ghes-ha-clean='/chroot-cluster-stop.sh && ./chroot-cluster-reset.sh test/cluster-ha.conf'
 
