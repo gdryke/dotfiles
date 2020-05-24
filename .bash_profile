@@ -7,6 +7,9 @@ export WORK_DIR='/Users/gdryke/work'
 alias rr='cd $CODE_DIR'
 alias myip='curl ipecho.net/plain ; echo'
 
+## GHES Aliases, specifically HA
+alias ghes-ha-clean='/chroot-cluster-stop.sh && ./chroot-cluster-reset.sh test/cluster-ha.conf'
+
 export HISTSIZE=10000000
 export HISTFILESIZE=10000000
 
