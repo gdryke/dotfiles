@@ -7,6 +7,9 @@ export WORK_DIR='/Users/gdryke/work'
 alias rr='cd $CODE_DIR'
 alias myip='curl ipecho.net/plain ; echo'
 
+export HISTSIZE=10000000
+export HISTFILESIZE=10000000
+
 # below is from: http://ezprompt.net/
 
 function nonzero_return() {
