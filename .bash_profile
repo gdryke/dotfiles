@@ -17,6 +17,9 @@ alias ghes-ha-clean='/chroot-cluster-stop.sh && ./chroot-cluster-reset.sh test/c
 export HISTSIZE=10000000
 export HISTFILESIZE=10000000
 
+# Rust
+export PATH="$HOME/.cargo/bin:$PATH"
+
 # below is from: http://ezprompt.net/
 
 function nonzero_return() {
