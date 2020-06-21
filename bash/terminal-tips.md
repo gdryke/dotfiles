@@ -4,4 +4,7 @@ can even do a profile/ENV on iterm2 to skip it, but usually require it to be cli
 Things like:
 * `\ww` for a wiki in vim
 * `ctrl + w -> v` for vertical window split (`:edit` for a new file)
-* etc
+* `cal` for a little calendar!
+* `ls` options: `-A` for all but dots, `-F` to make dirs easier to see
+* `cd -` for jumping back. Useful for bin dirs and stuff
+* `sudo !!` rerun last command as root

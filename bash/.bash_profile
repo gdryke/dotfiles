@@ -20,6 +20,21 @@ export HISTFILESIZE=10000000
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
 
+tip_file="~/terminal-tips.md"    # doesn't actually work now without ~ expansion...
+function echo_tip() {
+    tips=$(cat ~/terminal-tips.md | grep '^*')
+    tip_count=$(echo "$tips" | wc -l)
+    line=$[RANDOM%5+1]
+    echo "$tips" | sed -n $line"p"
+}
+
+if [ -e ~/terminal-tips.md ]
+then
+  tip=$(echo_tip)
+  echo "Tip of the terminal:"
+  echo "*$tip **"
+fi
+
 # below is from: http://ezprompt.net/
 
 function nonzero_return() {
