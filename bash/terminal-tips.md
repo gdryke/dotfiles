@@ -8,3 +8,4 @@ Things like:
 * `ls` options: `-A` for all but dots, `-F` to make dirs easier to see
 * `cd -` for jumping back. Useful for bin dirs and stuff
 * `sudo !!` rerun last command as root
+* `echo -e "I ${RED}love${NC} Stack Overflow"` color example! Needs variables (some in profile already)
