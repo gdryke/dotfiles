@@ -11,8 +11,15 @@ alias dev-ssh='minikube -p actions-dev ssh'
 alias dev-start='vmrun start /Users/gdryke/.minikube/machines/actions-dev/actions-dev.vmx'
 alias dev-stop='vmrun stop /Users/gdryke/.minikube/machines/actions-dev/actions-dev.vmx'
 
+alias bpdev='ssh -A build@gdryke-3b97aa63c.service.bpdev-us-east-1.github.net'
+
 ## GHES Aliases, specifically HA
 alias ghes-ha-clean='/chroot-cluster-stop.sh && ./chroot-cluster-reset.sh test/cluster-ha.conf'
+export ENABLE_ACTIONS=1
+alias all='./chroot-stop.sh && ./chroot-reset.sh && ./chroot-build.sh && ./chroot-start.sh && ./chroot-configure.sh'
+
+# open note setup, uses VSCODE/Drive
+alias note='code /Users/gdryke/personal/notes/notes.code-workspace'
 
 export HISTSIZE=10000000
 export HISTFILESIZE=10000000
