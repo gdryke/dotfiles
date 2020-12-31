@@ -11,10 +11,10 @@ alias dev-ssh='minikube -p actions-dev ssh'
 alias dev-start='vmrun start /Users/gdryke/.minikube/machines/actions-dev/actions-dev.vmx'
 alias dev-stop='vmrun stop /Users/gdryke/.minikube/machines/actions-dev/actions-dev.vmx'
 
-alias bpdev='ssh -A build@gdryke-3b97aa63c.service.bpdev-us-east-1.github.net'
-
+#alias bpdev='ssh -A build@gdryke-3b97aa63c.service.bpdev-us-east-1.github.net'
+alias bpdev='ssh -A build@gdryke-3bbf1ef29.service.bpdev-us-east-1.github.net'
 ## GHES Aliases, specifically HA
-alias ghes-ha-clean='/chroot-cluster-stop.sh && ./chroot-cluster-reset.sh test/cluster-ha.conf'
+alias ghes-ha-clean='./chroot-cluster-stop.sh && ./chroot-cluster-reset.sh test/cluster-ha.conf'
 export ENABLE_ACTIONS=1
 alias all='./chroot-stop.sh && ./chroot-reset.sh && ./chroot-build.sh && ./chroot-start.sh && ./chroot-configure.sh'
 
@@ -118,6 +118,18 @@ function parse_git_dirty {
 	fi
 }
 
+function set_actions_docker {
+    export DOCKER_TLS_VERIFY=1
+    export DOCKER_HOST=tcp://172.16.141.129:2376
+    export DOCKER_CERT_PATH=/Users/gdryke/.minikube/certs
+}
+
 export PS1="\`parse_git_branch\`[\t] \W \`nonzero_return\`\\$ "
+
+export EDITOR=vim
+
+# az cli Sub stuff
+alias set-actions-sub="az account set -s 'PE-Actions-Plaform-Test'"
+alias set-ghae-sub="az account set -s 'GHPI Dev 1'"
 
 echo 'Hi bash end'
