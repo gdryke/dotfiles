@@ -1,0 +1,34 @@
+# This workflow will run when a cleanliness issue is closed, and open up a new issue based on the closed issue.
+# TODO
+# - Write the actual if logic of the loop of "things": running down reliability bugs, removing old feature flags, looking through TODOs and pugging people, etc
+# - Setup templates for the opening
+# - Figure out what inputs we have to check first: cleanliness label all up (bomb out if not) and then which specific label was closed
+
+name: Keep Us Clean
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  loop-the-wheel:
+
+    if: !contains( github.event.issue.labels.*.name, 'cleanliness')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: JasonEtco/create-an-issue@v2
+        if: !contains( github.event.issue.labels.*.name, 'reliability')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          filename: .github/cleanliness/clean-up-ffs.md
+
+      - uses: JasonEtco/create-an-issue@v2
+        if: !contains( github.event.issue.labels.*.name, 'clean-up-ffs')
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          filename: .github/cleanliness/cleanliness.md
