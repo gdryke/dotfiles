@@ -12,7 +12,7 @@ on:
 jobs:
   loop-the-wheel:
 
-    if: !contains( github.event.issue.labels.*.name, 'cleanliness')
+    if: contains( github.event.issue.labels.*.name, 'cleanliness')
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,14 +20,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: JasonEtco/create-an-issue@v2
-        if: !contains( github.event.issue.labels.*.name, 'reliability')
+        if: contains( github.event.issue.labels.*.name, 'reliability')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           filename: .github/cleanliness/clean-up-ffs.md
 
       - uses: JasonEtco/create-an-issue@v2
-        if: !contains( github.event.issue.labels.*.name, 'clean-up-ffs')
+        if: contains( github.event.issue.labels.*.name, 'clean-up-ffs')
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
