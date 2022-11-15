@@ -34,9 +34,20 @@ jobs:
                 "clean-up-ffs",
                 "clean-up-links",
                 "reliability-bugs"];
+                
+              const closedIssue = await github.rest.issues.get({
+                ...context.repo,
+                context.issue.number
+              });
 
               var currentIndex = 0;
-              var index = currentIndex + 1;
+              for (const issueType of issueTypes) {
+                if (closeIssue.labels.includes(issueType)) {
+                  break
+                }
+                currentIndex++;
+              }
+              var index = (currentIndex + 1) % issueTypes.length;
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
               //var issueContent = getFileContents(whatIsNext+".md");
