@@ -31,9 +31,9 @@ jobs:
               // create issue with new label and new template
               // Add comment linking to this?
               const issueTypes = [
-                "clean-up-ffs",
-                "clean-up-links",
-                "reliability-bugs"];
+                {"name: "clean-up-ffs"},
+                {"name": "clean-up-links"},
+                {"name": "reliability-bugs"}];
               console.log("Getting closed issue details");
               const query = `query($owner:String!, $name:String!, $number:Int!) {
                 repository(owner:$owner, name:$name){
