@@ -20,35 +20,35 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Create the next clock issue
-      uses: actions/github-script@0.8.0
-      with:
-        debug: true
-        script: |
-            // figure out current index from label
-            // find next in list
-            // use index in file array
-            // create issue with new label and new template
-            // Add comment linking to this?
-            const issueTypes = [
-              "clean-up-ffs",
-              "clean-up-links",
-              "reliability-bugs"];
+        uses: actions/github-script@0.8.0
+        with:
+          debug: true
+          script: |
+              // figure out current index from label
+              // find next in list
+              // use index in file array
+              // create issue with new label and new template
+              // Add comment linking to this?
+              const issueTypes = [
+                "clean-up-ffs",
+                "clean-up-links",
+                "reliability-bugs"];
 
-            var currentIndex = 0;
-            var index = currentIndex + 1;
-            var whatIsNext = issueTypes[index];
-            console.log("Next uplock clock issue will be:  " + whatIsNext);
-            //var issueContent = getFileContents(whatIsNext+".md");
-            var issueContent = "Stuff and things";
-            const issue = await github.issues.create({
-                ...context.repo,
-                title: `Upkeep Clock: @${whatIsNext}`,
-                body: issueContent,
-                labels: [`upkeep-clock`, `@${whatIsNext}`]
-            });
-            console.log(`Successfully created the issue ${issue.data.html_url}`);
-            await github.rest.issues.createComment({
-              issue_number: issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: `**Created by:** LINK TODO`})
+              var currentIndex = 0;
+              var index = currentIndex + 1;
+              var whatIsNext = issueTypes[index];
+              console.log("Next uplock clock issue will be:  " + whatIsNext);
+              //var issueContent = getFileContents(whatIsNext+".md");
+              var issueContent = "Stuff and things";
+              const issue = await github.issues.create({
+                  ...context.repo,
+                  title: `Upkeep Clock: @${whatIsNext}`,
+                  body: issueContent,
+                  labels: [`upkeep-clock`, `@${whatIsNext}`]
+              });
+              console.log(`Successfully created the issue ${issue.data.html_url}`);
+              await github.rest.issues.createComment({
+                issue_number: issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: `**Created by:** LINK TODO`})
