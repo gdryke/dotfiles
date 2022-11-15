@@ -39,7 +39,8 @@ jobs:
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
               //var issueContent = getFileContents(whatIsNext+".md");
-              var issueContent = "Stuff and things" + "\r\n\r\n**Created by:** LINK TODO";
+              var rawIssueContent = await exec.exec("cat ./.github/upkeep-clock/"+whatIsNext+".md");
+              var issueContent = rawIssueContent + "\r\n\r\n**Created by:** LINK TODO";
               const issue = await github.issues.create({
                   ...context.repo,
                   title: `Upkeep Clock: ${whatIsNext}`,
