@@ -72,13 +72,13 @@ jobs:
               }
               const result = await github.graphql(lastClosedQuery, variables)
               console.log(result.repository.issues.nodes[0].labels)
-              var labelList = result.repository.issues.nodes[0].labels.nodes;
+              var labelList = result.repository.issues.nodes[0].labels.edges;
 
               console.log("Matching closed issue labels to issue types");
               for (const issueLabel of labelList)
               {
                 var currentIndex = 0;
-                var labelName = issueLabel.name;
+                var labelName = issueLabel.node.name;
                 for (const issueType of issueTypes) {
                   if (issueType == labelName) {
                     break
