@@ -39,7 +39,7 @@ jobs:
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
               //var issueContent = getFileContents(whatIsNext+".md");
-              var issueContent = "Stuff and things";
+              var issueContent = "Stuff and things" + "\r\n\r\n**Created by:** LINK TODO";
               const issue = await github.issues.create({
                   ...context.repo,
                   title: `Upkeep Clock: ${whatIsNext}`,
@@ -47,8 +47,3 @@ jobs:
                   labels: [`upkeep-clock`, `${whatIsNext}`]
               });
               console.log(`Successfully created the issue ${issue.data.html_url}`);
-              await github.rest.issues.createComment({
-                issue_number: issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: `**Created by:** LINK TODO`})
