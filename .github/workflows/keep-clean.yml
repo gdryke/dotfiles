@@ -53,12 +53,12 @@ jobs:
               }
               const result = await github.graphql(query, variables)
               console.log(result.repository.issue.labels)
-              var labelList = result.repository.issue.labels;
+              var labelList = result.repository.issue.labels.nodes;
 
               console.log("Matching labels to issue types");
               var currentIndex = 0;
               for (const issueType of issueTypes) {
-                if (labelListincludes(issueType)) {
+                if (labelList.includes(issueType)) {
                   break
                 }
                 currentIndex++;
