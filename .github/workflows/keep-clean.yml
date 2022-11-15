@@ -35,11 +35,11 @@ jobs:
                 "clean-up-links",
                 "reliability-bugs"];
               console.log("Getting closed issue details");
-              const closedIssue = await github.rest.issues.get({
-                  context.owner,
-                  context.repo,
-                  context.issue.number
-              });
+              //const closedIssue = await github.rest.issues.get({
+               //   context.owner,
+                //  context.repo,
+                 // context.issue.number
+              //});
 
               console.log("Matching labels to issue types");
               var currentIndex = 0;
