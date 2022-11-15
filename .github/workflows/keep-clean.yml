@@ -27,36 +27,54 @@ jobs:
               const fs = require('fs');
               // figure out current index from label
               // find next in list
-              // use index in file array
-              // create issue with new label and new template
-              // Add comment linking to this?
+              // create the next issue 
               const issueTypes = [
                 "clean-up-ffs",
                 "clean-up-links",
                 "reliability-bugs"];
+              // TODO improvement. On any upkeep-clock close, we could look for the most recently opened version
+              const openClockIssuesQuery = `query ($owner: String!, $name: String!) {
+                repository(owner: $owner, name: $name) {
+                  issues(labels: ["upkeep-clock"], last:1, states: [OPEN]) {
+                    totalCount
+                  }
+                }
+              }`;
+              
+              const openIssuesVariables = {
+                owner: context.repo.owner,
+                name: context.repo.repo
+              }
+              const openIssuesResult = await github.graphql(openClockIssuesQuery, openIssuesVariables)
+              console.log("Open issue count": openIssuesResult);
               console.log("Getting closed issue details");
-              const query = `query($owner:String!, $name:String!, $number:Int!) {
-                repository(owner:$owner, name:$name){
-                  issue(number:$number) {
-                    labels (last: 10){
-                      nodes {
-                        name
+              const lastClosedQuery = `query ($owner: String!, $name: String!) {
+                repository(owner: $owner, name: $name) {
+                  issues(labels: ["upkeep-clock"], last:1, states: [CLOSED]) {
+                    nodes {
+                      number
+                      labels(last: 10) {
+                        edges {
+                          node {
+                            name
+                          }
+                        }
                       }
                     }
                   }
                 }
               }`;
+              
               const variables = {
                 owner: context.repo.owner,
                 name: context.repo.repo,
                 number: context.issue.number
               }
               const result = await github.graphql(query, variables)
-              console.log(result.repository.issue.labels)
-              var labelList = result.repository.issue.labels.nodes;
+              console.log(result.repository.issues.nodes[0].labels)
+              var labelList = result.repository.issues.nodes[0].labels.nodes;
 
-              console.log("Matching labels to issue types");
-              
+              console.log("Matching closed issue labels to issue types");
               for (const issueLabel of labelList)
               {
                 var currentIndex = 0;
@@ -68,14 +86,15 @@ jobs:
                   currentIndex++;
                 }
               }
-              var index = (currentIndex + 1) % 3; // TODO set to real length
+              var index = (currentIndex + 1) % 3;
               console.log("New issue type index: ", index);
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
-              //var issueContent = getFileContents(whatIsNext+".md");
+              
               var filePath = "./.github/upkeep-clock/"+whatIsNext+".md";
               var rawIssueContent = fs.readFileSync(filePath, 'utf8');
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** LINK TODO";
+              
               const issue = await github.rest.issues.create({
                   ...context.repo,
                   title: `Upkeep Clock: ${whatIsNext}`,
