@@ -91,14 +91,9 @@ jobs:
                 if (issueTypes.includes(labelName)) {
                  currentIndex = issueTypes.indexOf(labelName);
                  break;
-                //for (const issueType of issueTypes) {
-                 // if (issueType == labelName) {
-                  //  break
-                 // }
-                  //currentIndex++;
                 }
               }
-              var index = (currentIndex + 1) % 3;
+              var index = (currentIndex + 1) % issueTypes.length;
               console.log("New issue type index: ", index);
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
