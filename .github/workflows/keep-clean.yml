@@ -46,7 +46,14 @@ jobs:
                 name: context.repo.repo
               }
               const openIssuesResult = await github.graphql(openClockIssuesQuery, openIssuesVariables)
-              console.log("Open issue count"+openIssuesResult.repository.issues.totalCount);
+              var openClockIssueCount = openIssuesResult.repository.issues.totalCount;
+              console.log("Open issue count: "+openClockIssueCount);
+              
+              if (openClockIssueCount>0) {
+                console.log("not processing this event, we only want to make a new upkeep clock issue when there are none left")
+                return
+              }
+              
               console.log("Getting closed issue details");
               const lastClosedQuery = `query ($owner: String!, $name: String!) {
                 repository(owner: $owner, name: $name) {
@@ -72,7 +79,9 @@ jobs:
               }
               const result = await github.graphql(lastClosedQuery, variables)
               console.log(result.repository.issues.nodes[0].labels)
-              var labelList = result.repository.issues.nodes[0].labels.edges;
+              var lastClosedClockIssue = result.repository.issues.nodes[0];
+              console.log("Highest numbered closed clock issue: "+lastClosedClockIssue.number);
+              var labelList = lastClosedClockIssue.labels.edges;
 
               console.log("Matching closed issue labels to issue types");
               for (const issueLabel of labelList)
