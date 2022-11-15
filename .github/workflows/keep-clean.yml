@@ -40,7 +40,7 @@ jobs:
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
               //var issueContent = getFileContents(whatIsNext+".md");
-              var filePath = "./.github/upkeep-clock/"+whatIsNext+".md");
+              var filePath = "./.github/upkeep-clock/"+whatIsNext+".md";
               var rawIssueContent = fs.readFileSync(filePath, 'utf8');
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** LINK TODO";
               const issue = await github.rest.issues.create({
