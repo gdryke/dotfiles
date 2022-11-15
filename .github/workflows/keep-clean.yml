@@ -53,15 +53,20 @@ jobs:
               }
               const result = await github.graphql(query, variables)
               console.log(result.repository.issue.labels)
-              var labelList = result.repository.issue.labels.nodes[].name;
+              var labelList = result.repository.issue.labels.nodes;
 
               console.log("Matching labels to issue types");
-              var currentIndex = 0;
-              for (const issueType of issueTypes) {
-                if (labelList.includes(issueType)) {
-                  break
+              
+              for (const issueLabel of labelList)
+              {
+                var currentIndex = 0;
+                var labelName = issueLabel.name;
+                for (const issueType of issueTypes) {
+                  if (issueType == labelName) {
+                    break
+                  }
+                  currentIndex++;
                 }
-                currentIndex++;
               }
               var index = (currentIndex + 1) % 3; // TODO set to real length
               console.log("New issue type index: ", index);
