@@ -36,7 +36,8 @@ jobs:
                 "reliability-bugs"];
               console.log("Getting closed issue details");
               const closedIssue = await github.rest.issues.get({
-                  ...context.repo,
+                  context.owner,
+                  context.repo,
                   context.issue.number
               });
 
