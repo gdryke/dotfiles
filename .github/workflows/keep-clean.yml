@@ -12,7 +12,7 @@ on:
 jobs:
   tick-the-clock:
 
-    if: !contains( github.event.issue.labels.*.name, 'upkeep-clock')
+    if: not(contains( github.event.issue.labels.*.name, 'upkeep-clock'))
     runs-on: ubuntu-latest
     permissions:
       contents: read
