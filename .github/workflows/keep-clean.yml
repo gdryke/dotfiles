@@ -46,7 +46,7 @@ jobs:
                 name: context.repo.repo
               }
               const openIssuesResult = await github.graphql(openClockIssuesQuery, openIssuesVariables)
-              console.log("Open issue count": openIssuesResult);
+              console.log("Open issue count"+openIssuesResult);
               console.log("Getting closed issue details");
               const lastClosedQuery = `query ($owner: String!, $name: String!) {
                 repository(owner: $owner, name: $name) {
