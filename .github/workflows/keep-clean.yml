@@ -24,6 +24,7 @@ jobs:
         with:
           debug: true
           script: |
+              const fs = require('fs');
               // figure out current index from label
               // find next in list
               // use index in file array
@@ -39,7 +40,8 @@ jobs:
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
               //var issueContent = getFileContents(whatIsNext+".md");
-              var rawIssueContent = await exec.exec("cat ./.github/upkeep-clock/"+whatIsNext+".md");
+              var filePath = "./.github/upkeep-clock/"+whatIsNext+".md");
+              var rawIssueContent = fs.readFileSync(filePath, 'utf8');
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** LINK TODO";
               const issue = await github.rest.issues.create({
                   ...context.repo,
