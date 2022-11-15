@@ -31,9 +31,9 @@ jobs:
               // create issue with new label and new template
               // Add comment linking to this?
               const issueTypes = [
-                {"name: "clean-up-ffs"},
-                {"name": "clean-up-links"},
-                {"name": "reliability-bugs"}];
+                "clean-up-ffs",
+                "clean-up-links",
+                "reliability-bugs"];
               console.log("Getting closed issue details");
               const query = `query($owner:String!, $name:String!, $number:Int!) {
                 repository(owner:$owner, name:$name){
@@ -53,7 +53,7 @@ jobs:
               }
               const result = await github.graphql(query, variables)
               console.log(result.repository.issue.labels)
-              var labelList = result.repository.issue.labels.nodes;
+              var labelList = result.repository.issue.labels.nodes[].name;
 
               console.log("Matching labels to issue types");
               var currentIndex = 0;
