@@ -88,11 +88,14 @@ jobs:
               {
                 var currentIndex = 0;
                 var labelName = issueLabel.node.name;
-                for (const issueType of issueTypes) {
-                  if (issueType == labelName) {
-                    break
-                  }
-                  currentIndex++;
+                if (issueTypes.includes(labelName) {
+                 currentIndex = issueTypes.indexOf(labelName);
+                 break;
+                //for (const issueType of issueTypes) {
+                 // if (issueType == labelName) {
+                  //  break
+                 // }
+                  //currentIndex++;
                 }
               }
               var index = (currentIndex + 1) % 3;
