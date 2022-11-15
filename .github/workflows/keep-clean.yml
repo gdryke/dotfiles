@@ -41,7 +41,7 @@ jobs:
               //var issueContent = getFileContents(whatIsNext+".md");
               var rawIssueContent = await exec.exec("cat ./.github/upkeep-clock/"+whatIsNext+".md");
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** LINK TODO";
-              const issue = await github.issues.create({
+              const issue = await github.rest.issues.create({
                   ...context.repo,
                   title: `Upkeep Clock: ${whatIsNext}`,
                   body: issueContent,
