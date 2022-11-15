@@ -48,7 +48,7 @@ jobs:
                 }
                 currentIndex++;
               }
-              var index = (currentIndex + 1) % issueTypes.length;
+              var index = (currentIndex + 1) % 3; // TODO set to real length
               console.log("New issue type index: ", index);
               var whatIsNext = issueTypes[index];
               console.log("Next uplock clock issue will be:  " + whatIsNext);
