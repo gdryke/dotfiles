@@ -1,8 +1,4 @@
-# This workflow will run when a cleanliness issue is closed, and open up a new issue based on the closed issue.
-# TODO
-# - Write the actual if logic of the loop of "things": running down reliability bugs, removing old feature flags, looking through TODOs and bugging people, etc
-# - Setup templates for the opening
-# - Figure out what inputs we have to check first: cleanliness label all up (bomb out if not) and then which specific label was closed
+# This workflow will run when an upkeep-clock issue is closed, and open up a new issue based on the closed issue if we have no upkeep-clock issues open.
 
 name: Upkeep Clock
 on:
@@ -25,14 +21,15 @@ jobs:
           debug: true
           script: |
               const fs = require('fs');
-              // figure out current index from label
-              // find next in list
-              // create the next issue 
+
               const issueTypes = [
                 "clean-up-ffs",
-                "clean-up-links",
-                "reliability-bugs"];
-              // TODO improvement. On any upkeep-clock close, we could look for the most recently opened version
+                "clean-up-dead-links",
+                "reliability-bugs",
+                "remove-old-component-versions"
+                ];
+
+              // check for any open upkeep-clock issues
               const openClockIssuesQuery = `query ($owner: String!, $name: String!) {
                 repository(owner: $owner, name: $name) {
                   issues(labels: ["upkeep-clock"], last:1, states: [OPEN]) {
@@ -40,22 +37,23 @@ jobs:
                   }
                 }
               }`;
-              
-              const openIssuesVariables = {
+
+              const openClockIssuesVariables = {
                 owner: context.repo.owner,
                 name: context.repo.repo
               }
-              const openIssuesResult = await github.graphql(openClockIssuesQuery, openIssuesVariables)
-              var openClockIssueCount = openIssuesResult.repository.issues.totalCount;
-              console.log("Open issue count: "+openClockIssueCount);
-              
+              const openClockIssuesResult = await github.graphql(openClockIssuesQuery, openClockIssuesVariables)
+              var openClockIssueCount = openClockIssuesResult.repository.issues.totalCount;
+              console.log("Open issue count: " + openClockIssueCount);
+
               if (openClockIssueCount>0) {
                 console.log("not processing this event, we only want to make a new upkeep clock issue when there are none left")
                 return
               }
-              
+
+              // there are no outstanding upkeep clock issue, get details on the highest numbered one
               console.log("Getting closed issue details");
-              const lastClosedQuery = `query ($owner: String!, $name: String!) {
+              const lastClosedClockQuery = `query ($owner: String!, $name: String!) {
                 repository(owner: $owner, name: $name) {
                   issues(labels: ["upkeep-clock"], last:1, states: [CLOSED]) {
                     nodes {
@@ -71,41 +69,44 @@ jobs:
                   }
                 }
               }`;
-              
-              const variables = {
+
+              const lastClosedClockVariables = {
                 owner: context.repo.owner,
                 name: context.repo.repo,
                 number: context.issue.number
               }
-              const result = await github.graphql(lastClosedQuery, variables)
-              console.log(result.repository.issues.nodes[0].labels)
-              var lastClosedClockIssue = result.repository.issues.nodes[0];
-              console.log("Highest numbered closed clock issue: "+lastClosedClockIssue.number);
+              const lastClosedClockResult = await github.graphql(lastClosedClockQuery, lastClosedClockVariables)
+              var lastClosedClockIssue = lastClosedClockResult.repository.issues.nodes[0];
+              console.log(lastClosedClockIssue.labels)
+              console.log("Highest numbered closed clock issue: " + lastClosedClockIssue.number);
               var labelList = lastClosedClockIssue.labels.edges;
 
+              // match the last closed to our issue types using the fixed label, which gets us the index of that match in our clock list
               console.log("Matching closed issue labels to issue types");
+              var currentIndex = 0;
               for (const issueLabel of labelList)
               {
-                var currentIndex = 0;
                 var labelName = issueLabel.node.name;
                 if (issueTypes.includes(labelName)) {
                  currentIndex = issueTypes.indexOf(labelName);
                  break;
                 }
               }
+
               var index = (currentIndex + 1) % issueTypes.length;
               console.log("New issue type index: ", index);
               var whatIsNext = issueTypes[index];
-              console.log("Next uplock clock issue will be:  " + whatIsNext);
-              
+              console.log("Next upkeep clock issue will be:  " + whatIsNext);
+
+              // get file content for the next issue and create it!
               var filePath = "./.github/upkeep-clock/"+whatIsNext+".md";
               var rawIssueContent = fs.readFileSync(filePath, 'utf8');
-              var issueContent = rawIssueContent + "\r\n\r\n**Created by:** LINK TODO";
-              
+              var issueContent = rawIssueContent + "\r\n\r\n**Created by:** [The Upkeep Clock](https://github.com/github/actions-larger-runners/.github/workflows/upkeep-clock.yml)";
+
               const issue = await github.rest.issues.create({
                   ...context.repo,
                   title: `Upkeep Clock: ${whatIsNext}`,
                   body: issueContent,
-                  labels: [`upkeep-clock`, `${whatIsNext}`]
+                  labels: [`upkeep-clock`, `${whatIsNext}`, `stale`]
               });
               console.log(`Successfully created the issue ${issue.data.html_url}`);
