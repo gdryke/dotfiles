@@ -88,7 +88,7 @@ jobs:
               {
                 var currentIndex = 0;
                 var labelName = issueLabel.node.name;
-                if (issueTypes.includes(labelName) {
+                if (issueTypes.includes(labelName)) {
                  currentIndex = issueTypes.indexOf(labelName);
                  break;
                 //for (const issueType of issueTypes) {
