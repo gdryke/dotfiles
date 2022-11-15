@@ -1,35 +1,54 @@
 # This workflow will run when a cleanliness issue is closed, and open up a new issue based on the closed issue.
 # TODO
-# - Write the actual if logic of the loop of "things": running down reliability bugs, removing old feature flags, looking through TODOs and pugging people, etc
+# - Write the actual if logic of the loop of "things": running down reliability bugs, removing old feature flags, looking through TODOs and bugging people, etc
 # - Setup templates for the opening
 # - Figure out what inputs we have to check first: cleanliness label all up (bomb out if not) and then which specific label was closed
 
-name: Keep Us Clean
+name: Upkeep Clock
 on:
   issues:
     types: [closed]
 
 jobs:
-  loop-the-wheel:
+  tick-the-clock:
 
-    if: contains( github.event.issue.labels.*.name, 'cleanliness')
+    if: !contains( github.event.issue.labels.*.name, 'upkeep-clock')
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      issues: write 
 
     steps:
       - uses: actions/checkout@v2
-      - uses: JasonEtco/create-an-issue@v2
-        if: contains( github.event.issue.labels.*.name, 'reliability')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          filename: .github/cleanliness/clean-up-ffs.md
+      - name: Create the next clock issue
+      uses: actions/github-script@0.8.0
+      with:
+        debug: true
+        script: |
+            // figure out current index from label
+            // find next in list
+            // use index in file array
+            // create issue with new label and new template
+            // Add comment linking to this?
+            const issueTypes = [
+              "clean-up-ffs",
+              "clean-up-links",
+              "reliability-bugs"];
 
-      - uses: JasonEtco/create-an-issue@v2
-        if: contains( github.event.issue.labels.*.name, 'clean-up-ffs')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          filename: .github/cleanliness/reliability.md
+            var currentIndex = 0;
+            var index = currentIndex + 1;
+            var whatIsNext = issueTypes[index];
+            console.log("Next uplock clock issue will be:  " + whatIsNext);
+            //var issueContent = getFileContents(whatIsNext+".md");
+            var issueContent = "Stuff and things";
+            const issue = await github.issues.create({
+                ...context.repo,
+                title: `Upkeep Clock: @${whatIsNext}`,
+                body: issueContent,
+                labels: [`upkeep-clock`, `@${whatIsNext}`]
+            });
+            console.log(`Successfully created the issue ${issue.data.html_url}`);
+            await github.rest.issues.createComment({
+              issue_number: issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: `**Created by:** LINK TODO`})
