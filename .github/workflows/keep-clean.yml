@@ -35,11 +35,24 @@ jobs:
                 "clean-up-links",
                 "reliability-bugs"];
               console.log("Getting closed issue details");
-              //const closedIssue = await github.rest.issues.get({
-               //   context.owner,
-                //  context.repo,
-                 // context.issue.number
-              //});
+              const query = `query($owner:String!, $name:String!, $number:Int!) {
+                repository(owner:$owner, name:$name){
+                  issue(number:$number) {
+                    labels (last: 10){
+                      nodes {
+                        name
+                      }
+                    }
+                  }
+                }
+              }`;
+              const variables = {
+                owner: context.repo.owner,
+                name: context.repo.repo,
+                number: context.issue.number
+              }
+              const result = await github.graphql(query, variables)
+              console.log(result)
 
               console.log("Matching labels to issue types");
               var currentIndex = 0;
