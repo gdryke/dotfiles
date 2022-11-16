@@ -99,7 +99,9 @@ jobs:
               await fs.readFile(filePath, (err, data) => {
                 if (err) throw err;
                 rawIssueContent = data;
+                console.log("Got content: " + rawIssueContent);
               });
+              console.log("Appending created by tag");
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** [The Upkeep Clock](https://github.com/github/actions-larger-runners/.github/workflows/upkeep-clock.yml)";
 
               const issue = await github.rest.issues.create({
