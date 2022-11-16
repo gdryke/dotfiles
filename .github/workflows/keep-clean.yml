@@ -20,7 +20,7 @@ jobs:
         with:
           debug: true
           script: |
-              const fs = require('fs');
+              const fs = require('fs').promises;
 
               const issueTypes = [
                 "clean-up-ffs",
@@ -95,13 +95,7 @@ jobs:
 
               // get file content for the next issue and create it!
               var filePath = "./.github/upkeep-clock/"+whatIsNext+".md";
-              var rawIssueContent = "";
-              await fs.readFile(filePath, (err, data) => {
-                if (err) throw err;
-                rawIssueContent = data;
-                console.log("Got content: " + rawIssueContent);
-              });
-              console.log("Appending created by tag");
+              var rawIssueContent = await fs.readFile(filePath, "utf8");
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** [The Upkeep Clock](https://github.com/github/actions-larger-runners/.github/workflows/upkeep-clock.yml)";
 
               const issue = await github.rest.issues.create({
