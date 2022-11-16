@@ -95,7 +95,11 @@ jobs:
 
               // get file content for the next issue and create it!
               var filePath = "./.github/upkeep-clock/"+whatIsNext+".md";
-              var rawIssueContent = await fs.readFile(filePath, 'utf8');
+              var rawIssueContent = "";
+              await fs.readFile(filePath, (err, data) => {
+                if (err) throw err;
+                rawIssueContent = data;
+              });
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** [The Upkeep Clock](https://github.com/github/actions-larger-runners/.github/workflows/upkeep-clock.yml)";
 
               const issue = await github.rest.issues.create({
