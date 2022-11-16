@@ -38,11 +38,11 @@ jobs:
                 }
               }`;
 
-              const openClockIssuesVariables = {
+              const clockIssuesVariables = {
                 owner: context.repo.owner,
                 name: context.repo.repo
               }
-              const openClockIssuesResult = await github.graphql(openClockIssuesQuery, openClockIssuesVariables)
+              const openClockIssuesResult = await github.graphql(openClockIssuesQuery, clockIssuesVariables)
               var openClockIssueCount = openClockIssuesResult.repository.issues.totalCount;
               console.log("Open issue count: " + openClockIssueCount);
 
@@ -70,12 +70,7 @@ jobs:
                 }
               }`;
 
-              const lastClosedClockVariables = {
-                owner: context.repo.owner,
-                name: context.repo.repo,
-                number: context.issue.number
-              }
-              const lastClosedClockResult = await github.graphql(lastClosedClockQuery, lastClosedClockVariables)
+              const lastClosedClockResult = await github.graphql(lastClosedClockQuery, clockIssuesVariables)
               var lastClosedClockIssue = lastClosedClockResult.repository.issues.nodes[0];
               console.log(lastClosedClockIssue.labels)
               console.log("Highest numbered closed clock issue: " + lastClosedClockIssue.number);
@@ -83,7 +78,7 @@ jobs:
 
               // match the last closed to our issue types using the fixed label, which gets us the index of that match in our clock list
               console.log("Matching closed issue labels to issue types");
-              var currentIndex = 0;
+              var currentIndex = -1; // Match indexOf() failure
               for (const issueLabel of labelList)
               {
                 var labelName = issueLabel.node.name;
@@ -100,13 +95,13 @@ jobs:
 
               // get file content for the next issue and create it!
               var filePath = "./.github/upkeep-clock/"+whatIsNext+".md";
-              var rawIssueContent = fs.readFileSync(filePath, 'utf8');
+              var rawIssueContent = await fs.readFile(filePath, 'utf8');
               var issueContent = rawIssueContent + "\r\n\r\n**Created by:** [The Upkeep Clock](https://github.com/github/actions-larger-runners/.github/workflows/upkeep-clock.yml)";
 
               const issue = await github.rest.issues.create({
                   ...context.repo,
                   title: `Upkeep Clock: ${whatIsNext}`,
                   body: issueContent,
-                  labels: [`upkeep-clock`, `${whatIsNext}`, `stale`]
+                  labels: ["upkeep-clock", whatIsNext, "keep"]
               });
               console.log(`Successfully created the issue ${issue.data.html_url}`);
