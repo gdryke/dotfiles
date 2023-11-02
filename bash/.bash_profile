@@ -21,6 +21,8 @@ alias all='./chroot-stop.sh && ./chroot-reset.sh && ./chroot-build.sh && ./chroo
 # open note setup, uses VSCODE/Drive
 alias note='code /Users/gdryke/personal/notes/notes.code-workspace'
 
+alias weather='curl wttr.in'
+
 export HISTSIZE=10000000
 export HISTFILESIZE=10000000
 
@@ -131,5 +133,61 @@ export EDITOR=vim
 # az cli Sub stuff
 alias set-actions-sub="az account set -s 'PE-Actions-Plaform-Test'"
 alias set-ghae-sub="az account set -s 'GHPI Dev 1'"
+
+alias runnertest="ssh -i ~/.ssh/id_runnertest2 -p 122 admin@20.80.144.9"
+
+function checkAzureSupport() {
+ticket=$1
+ticket='2103260010002042'
+# TODO get token from here: cat ~/.azure/accessTokens.json  | jq
+# And if it expires, refresh and regrab with `az account list --output none` (I think)
+token=$(cat ~/.azure/accessTokens.json  | jq -r 'last(.[] | select(.userId == "grdry@microsoft.com" and .resource == "https://management.core.windows.net/")).accessToken')
+auth="Bearer $token"
+
+curl -s "https://management.azure.com/subscriptions/32f750d1-2a53-4792-a857-b5a0ee599f96/providers/Microsoft.Support/supportTickets/$ticket?api-version=2015-03-01" \
+  -H 'x-ms-client-session-id: ffdcdc05ff9041218b267bb3c7d0fb2c' \
+  -H 'x-ms-command-name: Microsoft_Azure_Support.' \
+  -H 'Accept-Language: en' \
+  -H "Authorization: $auth" \
+  -H 'x-ms-effective-locale: en.en-us' \
+  -H 'Content-Type: application/json' \
+  -H 'Accept: application/json, text/javascript, */*; q=0.01' \
+  -H 'GetOperationType: GetTicketDetailsOnly' \
+  -H 'x-ms-client-request-id: ba0d000f-01d5-43ef-b67c-4b8269f13003' \
+  -H 'Referer: ' \
+  -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36' \
+  --compressed | jq .properties.supportRequest.status
+}
+
+function getShasFromBuild() {
+grep 'digest: sha' ~/docs/raw_adn_docker_build.txt | awk -F' ' '{print $2; print $4}'
+}
+
+alias gp-off="launchctl unload /Library/LaunchAgents/com.paloaltonetworks.gp.pangp*"
+alias gp-on="launchctl load /Library/LaunchAgents/com.paloaltonetworks.gp.pangp*"
+alias '??'='github-copilot-cli what-the-shell'
+
+function reminder() {
+sleep $1 && open raycast://confetti && osascript -e "tell app \"System Events\" to display alert \"$2\""
+}
+
+# only works on mac as is
+function kusto-link() {
+content=$(pbpaste)
+
+link=$(echo "$content" | head -1)
+echo $link
+echo $link | grep -q "dataexplorer.azure.com"
+if [ $? -ne 0 ]; then
+    echo "First line does not appear to be a Kusto link, exiting"
+    echo '\t'"$link"
+    return
+fi
+echo "dumping formatted query"
+
+body=$(echo "$content" | tail -n +3)
+printf '```\n%s\n```\n[link](%s\n)\n' "$body" "$link" | pbcopy
+}
+
 
 echo 'Hi bash end'

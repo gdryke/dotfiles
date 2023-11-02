@@ -11,3 +11,4 @@ Things like:
 * `echo -e "I ${RED}love${NC} Stack Overflow"` color example! Needs variables (some in profile already)
 * `cmd + k, v` in vscode, markdown previewing
 * `cmd + p, then #[Some Header]` search markdown headers in workspace files!
+* `weather` for my weather alias to curl wttr.in

@@ -56,7 +56,9 @@ nnoremap <space> za
 vnoremap <space> zf
 
 " Color scheme, normal is default
-colorscheme darkzen
+silent! colorscheme evening
+silent! colorscheme darkzen
+silent! colorscheme synthwave84
 
 filetype plugin on
 
