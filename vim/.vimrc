@@ -4,6 +4,9 @@ set expandtab
 set smartindent
 set shiftwidth=4
 
+" backspace
+set backspace=indent,eol,start
+
 " Map SemiColon to Colon and Colon to SemiColon. Way better.
 nnoremap ; :
 nnoremap : ;
@@ -58,8 +61,16 @@ vnoremap <space> zf
 " Color scheme, normal is default
 silent! colorscheme evening
 silent! colorscheme darkzen
-silent! colorscheme synthwave84
+" silent! colorscheme synthwave84
 
 filetype plugin on
 
 runtime! ftplugin/man.vim
+
+
+
+autocmd! User GoyoEnter Limelight
+autocmd! User GoyoLeave Limelight!
+
+let g:goyo_width=100
+

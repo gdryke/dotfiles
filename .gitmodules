@@ -1,0 +1,18 @@
+[submodule "vim/pack/vim-markdown"]
+	path = vim/pack/vim-markdown
+	url = git@github.com:preservim/vim-markdown.git
+[submodule "vim/.vim/pack/vim-markdown/vim-markdown"]
+	path = vim/.vim/pack/vim-markdown/vim-markdown
+	url = git@github.com:preservim/vim-markdown.git
+[submodule "vim/.vim/pack/vim-markdown/start"]
+	path = vim/.vim/pack/vim-markdown/start
+	url = git@github.com:tpope/vim-markdown.git
+[submodule "vim/.vim/pack/plugins/start/vimwiki"]
+	path = vim/.vim/pack/plugins/start/vimwiki
+	url = git@github.com:vimwiki/vimwiki.git
+[submodule "vim/.vim/pack/plugins/start/goyo.vim"]
+	path = vim/.vim/pack/plugins/start/goyo.vim
+	url = git@github.com:junegunn/goyo.vim.git
+[submodule "vim/.vim/pack/plugins/start/limelight.vim"]
+	path = vim/.vim/pack/plugins/start/limelight.vim
+	url = git@github.com:junegunn/limelight.vim.git

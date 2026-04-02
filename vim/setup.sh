@@ -4,8 +4,8 @@
 DIR=$(dirname "$0")
 cd "$DIR"
 
-SOURCE="$(realpath -m .)"
-DESTINATION="$(realpath -m ~)"
+SOURCE="$(realpath .)"
+DESTINATION="$(realpath ~)"
 
 echo "Setting up vim..."
 # TODO add darkzen and any other static setup in .vim folder
